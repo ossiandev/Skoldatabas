@@ -10,13 +10,13 @@
 class SchoolSys
 {
 public:
-	void Run();
+	void Run(bool running);
 	void AddStudent();
 	void RemoveStudent();
 	void AddClass();
 	void RemoveClass();
 private:
-	std::vector<Student> classes;
+	std::vector<Student> students;
 	std::vector<std::string> schoolClasses;
 
 };
