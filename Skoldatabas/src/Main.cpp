@@ -3,5 +3,5 @@
 int main()
 {
 	SchoolSys system;
-	system.Run();
+	system.Run(true);
 }
