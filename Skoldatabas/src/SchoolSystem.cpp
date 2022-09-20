@@ -1,5 +1,6 @@
 #include "SchoolSystem.h"
 
+
 void SchoolSys::Run(bool running)
 {
     while (running)
@@ -11,23 +12,29 @@ void SchoolSys::Run(bool running)
         std::cout << "3. Add Class\n";
         std::cout << "4. Remove Class\n";
         std::cout << "5. Log out\n\n Please Select your business\n Input: ";
-        int input = 0;
+        char input;
+       
         std::cin >> input;
+
+
+
+
+
         switch (input)
         {
-        case 1:
+        case '1':
             SchoolSys::AddStudent();
             break;
-        case 2:
+        case '2':
             SchoolSys::RemoveStudent();
             break;
-        case 3:
+        case '3':
             SchoolSys::AddClass();
             break;
-        case 4:
+        case '4':
             SchoolSys::RemoveClass();
             break;
-        case 5:
+        case '5':
             std::cout << "Exiting Program...";
             std::cin;
             running = false; 
@@ -41,7 +48,7 @@ void SchoolSys::Run(bool running)
 
 
 //Document for AddStudent() 
-// Needs to check if _class exists in database
+// Needs to check if _class exists in database or add student class to database
 void SchoolSys::AddStudent()
 {
     Student student; 
@@ -54,7 +61,7 @@ void SchoolSys::AddStudent()
         SchoolSys::Clear();
         std::cout << "Please enter Student name\n\n";
         std::cout << "Name : ";
-        
+        std::cin.ignore();
         std::getline(std::cin, input);
         student.name = input;
         SchoolSys::Clear();
@@ -68,33 +75,30 @@ void SchoolSys::AddStudent()
         }
     }
     confirmed = false;
-    //Build student age
+    //student age with try catch incase with letters
     while (!confirmed)
     {
         SchoolSys::Clear();
         std::cout << "Please enter Student Age\n\n";
         std::cout << "Age : ";
         int age = 0;
-        try
+        
+     
+        std::cin >> age;
+        student.age = age;
+        SchoolSys::Clear();
+        std::cout << "\nStudent Age is " << student.age << "\n";
+        std::cout << "1. Confirm\n";
+        std::cout << "2. Decline\n";
+        std::cin >> input;
+        if (input == "1")
         {
-            std::cin >> age;
-            student.age = age;
-            SchoolSys::Clear();
-            std::cout << "\nStudent Age is " << student.age << "\n";
-            std::cout << "1. Confirm\n";
-            std::cout << "2. Decline\n";
-            std::cin >> input;
-            if (input == "1")
-            {
-                confirmed = true;
-            }
+            confirmed = true;
+        }
+        
 
-        }
-        catch (int age)
-        {
-            std::cout << "Write in Numbers not in letters\n";
-            std::cin;
-        }
+        
+
     }
 
     //Student Class
@@ -114,8 +118,11 @@ void SchoolSys::AddStudent()
         std::cin >> input;
         if (input == "1")
         {
+           // if (find(schoolClasses.begin(), schoolClasses.end(), student.SchoolClass) == true)
             confirmed = true;
         }
+
+        
     }
     students.push_back(student);
 
@@ -125,7 +132,21 @@ void SchoolSys::AddStudent()
 
 void SchoolSys::RemoveStudent()
 {
-    
+    bool searching = true;
+    std::string input = "";
+    while (searching)
+    {
+        SchoolSys::Clear();
+
+        std::getline(std::cin, input);
+
+        
+        
+
+        
+       
+    }
+
 }
 
 void SchoolSys::AddClass()
