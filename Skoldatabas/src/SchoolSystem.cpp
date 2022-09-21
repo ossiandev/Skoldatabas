@@ -12,7 +12,7 @@ void SchoolSys::Run(bool running)
         std::cout << "3. Add Class\n";
         std::cout << "4. Remove Class\n";
         std::cout << "5. Log out\n\n Please Select your business\n Input: ";
-        char input;
+        char input ='0';
        
         std::cin >> input;
 
@@ -112,14 +112,30 @@ void SchoolSys::AddStudent()
         std::cin >> input;
         student.SchoolClass = input;
         SchoolSys::Clear();
+        //Transforming string to uppercase   
+        std::transform(student.SchoolClass.begin(), student.SchoolClass.end(), student.SchoolClass.begin(), ::toupper);
+
         std::cout << "\nStudent Class is " << student.SchoolClass << "\n";
         std::cout << "1. Confirm\n";
         std::cout << "2. Decline\n";
         std::cin >> input;
         if (input == "1")
         {
-           // if (find(schoolClasses.begin(), schoolClasses.end(), student.SchoolClass) == true)
+            std::cout << "Checking if Student is within class.\n";
+            for (auto & i :schoolClasses)
+            {
+                
+                if (student.SchoolClass != i)
+                {
+                    std::cout << "Student class does not exist. \n";
+                    std::cout << "Student class will automatically be created to remove please visit remove page. \n";
+                    schoolClasses.push_back(student.SchoolClass);
+                    std::cin;
+
+                }
+            }
             confirmed = true;
+
         }
 
         
@@ -158,6 +174,7 @@ void SchoolSys::AddClass()
     std::cin >> input; 
 
     std::cout << "Adding schoolclass... \n";
+    std::transform(input.begin(), input.end(), input.begin(), ::toupper);
     for (int i  =0  ; i < schoolClasses.size(); i++)
     {
         
@@ -171,6 +188,21 @@ void SchoolSys::AddClass()
 
 void SchoolSys::RemoveClass()
 {
+    SchoolSys::Clear();
+    if (schoolClasses.size() == 0) { return; }
+    int pageSize = 5;
+    int page = 0;
+    std::cout << "Heres a list of all existing classes\n";
+    for (int i = page ; i < schoolClasses.size(); i++)
+    {
+        std::cout << (i + 1) << ": " << schoolClasses[i] << "\n";
+        if (i == pageSize) 
+        {
+            if (page != 0)  std::cout << "\n d. Next Page"; 
+            
+            else  std::cout << "\n d. Next Page";  std::cout << "\n a. Previous Page"; 
+        }
+    }
 
 }
 //FUNCTIONS THAT ONLY PRINT 
