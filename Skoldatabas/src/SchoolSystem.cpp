@@ -190,11 +190,21 @@ void SchoolSys::RemoveClass()
 {
     SchoolSys::Clear();
     if (schoolClasses.size() == 0) { return; }
+
+
+    //How many classes should be displayed per page
     int pageSize = 5;
+
+    //Which page user is on
     int page = 0;
-    std::cout << "Heres a list of all existing classes\n";
-    for (int i = page ; i < schoolClasses.size(); i++)
+    char input = '0';
+
+    std::cout << "List of all existing classes:\n\n";
+    //for what page you are on
+   
+   for (int i = page; i < schoolClasses.size(); i++)
     {
+        //print pageSize amount of classes
         std::cout << (i + 1) << ": " << schoolClasses[i] << "\n";
         if (i == pageSize) 
         {
@@ -202,49 +212,15 @@ void SchoolSys::RemoveClass()
             
             else  std::cout << "\n d. Next Page";  std::cout << "\n a. Previous Page"; 
         }
+        
     }
+   
+   
+
 
 }
 //FUNCTIONS THAT ONLY PRINT 
 void SchoolSys::Clear() {
     // CSI[2J clears screen, CSI[H moves the cursor to top-left corner
     std::cout << "\x1B[2J\x1B[H";
-}
-void StartMenu()
-{
-    
-    std::cout << "School System Adminstration App\n";
-    std::cout << "Please Select one of the following \n";
-    std::cout << "\n\n";
-    std::cout << "1. Add Student\n\n";
-    std::cout << "2. Remove Student\n\n";
-    std::cout << "3. Add Class\n\n";
-    std::cout << "4. Remove Class\n\n";
-    std::cout << "5. Exit Program\n\n";
-
-
-}
-
-void  AddStudentMenu()
-{
-    
-
-}
-
-void  RemoveStudentMenu()
-{
-    
-
-}
-
-void  AddClassMenu()
-{
-
-
-}
-
-void  RemoveClassMenu()
-{
-    
-    
 }
