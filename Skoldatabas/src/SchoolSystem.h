@@ -1,10 +1,10 @@
 #pragma once
+#include "ConsoleCF.h"
 #include "Student.h"
 #include <vector>
 #include <string>
 #include <iostream>
 #include <algorithm>
-
 
 
 //hold student names
@@ -16,7 +16,6 @@ public:
 	void Run(bool running);
 	void AddStudent();
 	void RemoveStudent();
-	void AddClass();
 	void RemoveClass();
 	//functions with print 
 	void ShowStudents();

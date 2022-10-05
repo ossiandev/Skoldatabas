@@ -139,10 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\ConsoleCF.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\SchoolSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ConsoleCF.h" />
     <ClInclude Include="src\SchoolSystem.h" />
     <ClInclude Include="src\Student.h" />
   </ItemGroup>

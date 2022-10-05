@@ -9,9 +9,10 @@ void SchoolSys::Run(bool running)
         std::cout << "School Database Main Menu.\nHere you can access all classes and all student files\n";
         std::cout << "1. Add Student\n";
         std::cout << "2. Remove Student\n";
-        std::cout << "3. Add Class\n";
-        std::cout << "4. Remove Class\n";
-        std::cout << "5. Log out\n\n Please Select your business\n Input: ";
+        std::cout << "3. Remove Class\n";
+        std::cout << "4. Show Students\n";
+        std::cout << "5. Show Classes\n";
+        std::cout << "6. Log out\n\n Please Select your business\n Input: ";
         char input ='0';
         std::cin >> input;
         switch (input)
@@ -23,12 +24,15 @@ void SchoolSys::Run(bool running)
             SchoolSys::RemoveStudent();
             break;
         case '3':
-            SchoolSys::AddClass();
-            break;
-        case '4':
             SchoolSys::RemoveClass();
             break;
-        case '5':
+        case '4':
+            SchoolSys::ShowStudents();
+            break;
+        case '5': 
+            SchoolSys::ShowClasses();
+            break;
+        case '6':
             std::cout << "Exiting Program...";
             std::cin;
             running = false; 
@@ -79,51 +83,54 @@ void SchoolSys::AddStudent()
         std::cin >> age;
         student.age = age;
         SchoolSys::Clear();
-        std::cout << "\nStudent Age is " << student.age << "\n";
-        std::cout << "1. Confirm\n";
-        std::cout << "2. Decline\n";
+        std::cout << "Student Age is " << student.age << "\n";
+        std::cout << (  "1. Confirm\n");
+        std::cout << (  "2. Decline\n");
         std::cin >> input;
         if (input == "1")
         {
             confirmed = true;
         }
     }
-
     //Student Class
     confirmed = false;
     while (!confirmed)
     {
         SchoolSys::Clear();
-        std::cout << "Please enter Student class\n\n";
+        std::cout << ("Please enter Student class\n");
         std::cout << "Class  : ";
         std::cin >> input;
         student.SchoolClass = input;
         SchoolSys::Clear();
         //Transforming string to uppercase   
         std::transform(student.SchoolClass.begin(), student.SchoolClass.end(), student.SchoolClass.begin(), ::toupper);
-        std::cout << "\nStudent Class is " << student.SchoolClass << "\n";
+        bool noClass = true;
+        std::cout <<"Student Class is " <<student.SchoolClass + "\n";
         std::cout << "1. Confirm\n";
         std::cout << "2. Decline\n";
         std::cin >> input;
         if (input == "1")
         {
-            std::cout << "Checking if Student is within class.\n";
-            for (auto & i :schoolClasses)
-            {                
-                if (student.SchoolClass != i)
+            students.push_back(student);
+            std::cout <<( student.name + " added!");
+            std::cin.ignore();
+            std::cin.get();
+            confirmed = true;
+            //Checking if schoolclass does exit
+            for (auto& i : schoolClasses)
+            {
+                if (student.SchoolClass == i)
                 {
-                    std::cout << "Student class does not exist. \n";
-                    std::cout << "Student class will automatically be created to remove please visit remove page. \n";
-                    schoolClasses.push_back(student.SchoolClass);
-                    std::cin;
-
+                    return;
                 }
             }
-            confirmed = true;
         }
+        std::cout <<( "Student class does not exist.\n");
+        std::cout <<("Student class will automatically be created\n");
+        schoolClasses.push_back(student.SchoolClass);
+        std::cin.ignore();
+        std::cin.get();
     }
-    students.push_back(student);
-    std::cout << students[0].name << " added!";
 }
 
 
@@ -143,13 +150,14 @@ void SchoolSys::RemoveStudent()
         {
             if (input == students[i].name)
             {
-                std::cout << "Removing " << input << " and their class if they are the last one standing\n";
+                std::cout << "Removing " << input;
                 std::cin.get();
-                //if students class doesnt have more members than themselves class will get automatically removed.
+                     //if students class doesnt have more members than themselves class will get automatically removed.
+                //find schoolclass size
+                int schoolClassSize = 0;
                 for (int j = 0; j < schoolClasses.size(); j++)
                 {
-                    int schoolClassSize = 0;
-                    //find schoolclass size
+                    
                     if (schoolClasses[j] == students[i].SchoolClass)
                     {
                         for (int a = 0; a < students.size(); a++)
@@ -160,24 +168,21 @@ void SchoolSys::RemoveStudent()
                                 schoolClassSize++;
                             }
                         }
-                    }
-                    //if there is one member within class, erase
-                    if (schoolClassSize == 0)
-                    {
-                        schoolClasses.erase(schoolClasses.begin() + j);
-                    }
-                    //else continue removing student from system
+                        //if there is one member within class, erase
+                        if (schoolClassSize == 1)
+                        {
+                            schoolClasses.erase(schoolClasses.begin() + j);
+                        }
+                    }    
                 }
                 students.erase(students.begin() + i);
                 searching = false;
+                return;
             }
-            
-
-            
         }  
-        std::cout << "No such Person found\n\n";
-        std::cout << "1. Exit back to menu\n";
-        std::cout << "2. Find right Person\n\n";
+        std::cout <<( "No such Person found\n");
+        std::cout <<( "1. Exit back to menu\n");
+        std::cout << ( "2. Find right Person\n");
         char lastInput = 'l';
         std::cin.get(lastInput);
         //exit
@@ -186,35 +191,18 @@ void SchoolSys::RemoveStudent()
             searching = false;
         }
     }
-
 }
 
-void SchoolSys::AddClass()
-{
-    SchoolSys::Clear();
-    std::cout << "Add a school class \n Class Name : ";
-    std::string input = "";
-    std::cin >> input; 
-    std::cout << "Adding schoolclass... \n";
-    std::transform(input.begin(), input.end(), input.begin(), ::toupper);
-    for (int i  =0  ; i < schoolClasses.size(); i++)
-    {
-        if (input != schoolClasses[i])
-        {
-            schoolClasses.push_back(input);
-        }
-    }
-}
 
 void SchoolSys::RemoveClass()
 {
-    if (schoolClasses.size() == 0) { return; }
+    if (schoolClasses.size() == 0) { std::cout << "No classes found \n"; std::cin.ignore();std::cin.get(); return; }
     bool removing = true;
     while(removing)
     { 
     SchoolSys::Clear();
-    std::cout << "To remove a Class please type their name (case sensitive) \nNote however that removing a class will remove all students within that same class.\n" << "\n";
-    std::cout << "\nName: ";
+    std::cout <<("To remove a Class please type their name (case sensitive) \nNote however that removing a class will remove all students within that same class.\n");
+    std::cout << "Name: ";
     std::string input = "";
     std::cin.ignore();
     std::getline(std::cin,input);
@@ -236,6 +224,7 @@ void SchoolSys::RemoveClass()
 
            schoolClasses.erase(schoolClasses.begin() + i);
            removing = false;
+           return;
        }
 
    }
@@ -283,19 +272,84 @@ void SchoolSys::RemoveClass()
    
    */
 
-
 }
 
 //FUNCTIONS THAT ONLY PRINT 
+//Clears Console
 void SchoolSys::Clear() {
     // CSI[2J clears screen, CSI[H moves the cursor to top-left corner
     std::cout << "\x1B[2J\x1B[H";
 }
+//Shows Students
 void SchoolSys::ShowStudents()
 {
-
+    SchoolSys::Clear();
+    // if there are no students to show return
+    if (students.size() == 0) { std::cout << ("No Students Found.\n"); std::cin.ignore(); std::cin.get(); return; }
+    std::cout <<("Type Student Name to get their Information\nType a class to find who goes to what class.\n");
+    //Get student name from input
+    std::string input = "";
+    std::cin.ignore();
+    std::getline(std::cin, input);
+    //Go through whole student vector
+    for (int i = 0; i < students.size(); i++)
+    {
+        //When student is found
+        if (input == students[i].name)
+        {
+            //Display all info
+            SchoolSys::Clear();
+            std::cout << ("School Student found! \n");
+            std::cout << "Name: " <<students[i].name << "\n";
+            std::cout << "Age: " <<students[i].age << "\n";
+            std::cout << "Class" <<students[i].SchoolClass << "\n";
+            std::cout << "\nPress any key to return to menu.\n";
+            std::cin.ignore();
+            std::cin.get();
+            return;
+        }
+    }
+    //Find Student Class Mates
+    for (int i = 0; i < schoolClasses.size(); i++)
+    {
+        //When school class is found
+        if (schoolClasses[i] == input)
+        {
+            //find each student with schoolclass[i]
+            for (auto& student : students) 
+            {
+                //Print name
+                if (student.SchoolClass == schoolClasses[i])
+                {
+                    std::cout << (student.name + "\n");
+                }
+            }
+            std::cout << ("\nPress any key to return to menu\n");
+            std::cin.ignore();
+            std::cin.get();
+            
+        }
+    }
 }
 
 void SchoolSys::ShowClasses()
 {
+    SchoolSys::Clear();
+    // if no classes exist go back to menu
+    if (schoolClasses.size() == 0) { std::cout << ("No classes available\n"); std::cin.get(); return; }
+    std::cout << "Showing all classes\n";
+    //Prints all Classes
+    for (int i = 0; i < schoolClasses.size(); i++)
+    {
+        std::cout << (i + 1) << +". ";
+        std::cout << (schoolClasses[i] + "\n");
+
+    }
+    std::cin.ignore();
+    std::cin.get();
+    return;
+    
+    
 }
+
+
