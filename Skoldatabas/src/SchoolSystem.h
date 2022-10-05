@@ -19,6 +19,8 @@ public:
 	void AddClass();
 	void RemoveClass();
 	//functions with print 
+	void ShowStudents();
+	void ShowClasses();
 	void Clear();
 
 

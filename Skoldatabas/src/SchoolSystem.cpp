@@ -13,13 +13,7 @@ void SchoolSys::Run(bool running)
         std::cout << "4. Remove Class\n";
         std::cout << "5. Log out\n\n Please Select your business\n Input: ";
         char input ='0';
-       
         std::cin >> input;
-
-
-
-
-
         switch (input)
         {
         case '1':
@@ -82,8 +76,6 @@ void SchoolSys::AddStudent()
         std::cout << "Please enter Student Age\n\n";
         std::cout << "Age : ";
         int age = 0;
-        
-     
         std::cin >> age;
         student.age = age;
         SchoolSys::Clear();
@@ -95,10 +87,6 @@ void SchoolSys::AddStudent()
         {
             confirmed = true;
         }
-        
-
-        
-
     }
 
     //Student Class
@@ -108,13 +96,11 @@ void SchoolSys::AddStudent()
         SchoolSys::Clear();
         std::cout << "Please enter Student class\n\n";
         std::cout << "Class  : ";
-
         std::cin >> input;
         student.SchoolClass = input;
         SchoolSys::Clear();
         //Transforming string to uppercase   
         std::transform(student.SchoolClass.begin(), student.SchoolClass.end(), student.SchoolClass.begin(), ::toupper);
-
         std::cout << "\nStudent Class is " << student.SchoolClass << "\n";
         std::cout << "1. Confirm\n";
         std::cout << "2. Decline\n";
@@ -123,8 +109,7 @@ void SchoolSys::AddStudent()
         {
             std::cout << "Checking if Student is within class.\n";
             for (auto & i :schoolClasses)
-            {
-                
+            {                
                 if (student.SchoolClass != i)
                 {
                     std::cout << "Student class does not exist. \n";
@@ -135,32 +120,71 @@ void SchoolSys::AddStudent()
                 }
             }
             confirmed = true;
-
         }
-
-        
     }
     students.push_back(student);
-
     std::cout << students[0].name << " added!";
 }
 
 
 void SchoolSys::RemoveStudent()
 {
+    if (students.size() == 0) { return; }
     bool searching = true;
     std::string input = "";
     while (searching)
     {
         SchoolSys::Clear();
-
+        std::cout << "Removing Student\nPlease type their name (case sensitive) \n\nName: ";
+        std::cin.ignore();
         std::getline(std::cin, input);
+        SchoolSys::Clear();
+        for (int i = 0; i < students.size(); i++)
+        {
+            if (input == students[i].name)
+            {
+                std::cout << "Removing " << input << " and their class if they are the last one standing\n";
+                std::cin.get();
+                //if students class doesnt have more members than themselves class will get automatically removed.
+                for (int j = 0; j < schoolClasses.size(); j++)
+                {
+                    int schoolClassSize = 0;
+                    //find schoolclass size
+                    if (schoolClasses[j] == students[i].SchoolClass)
+                    {
+                        for (int a = 0; a < students.size(); a++)
+                        {
+                            //schoolclass size found 
+                            if (students[a].SchoolClass == schoolClasses[j])
+                            {
+                                schoolClassSize++;
+                            }
+                        }
+                    }
+                    //if there is one member within class, erase
+                    if (schoolClassSize == 0)
+                    {
+                        schoolClasses.erase(schoolClasses.begin() + j);
+                    }
+                    //else continue removing student from system
+                }
+                students.erase(students.begin() + i);
+                searching = false;
+            }
+            
 
-        
-        
-
-        
-       
+            
+        }  
+        std::cout << "No such Person found\n\n";
+        std::cout << "1. Exit back to menu\n";
+        std::cout << "2. Find right Person\n\n";
+        char lastInput = 'l';
+        std::cin.get(lastInput);
+        //exit
+        if (lastInput == '1')
+        {
+            searching = false;
+        }
     }
 
 }
@@ -169,27 +193,68 @@ void SchoolSys::AddClass()
 {
     SchoolSys::Clear();
     std::cout << "Add a school class \n Class Name : ";
-
     std::string input = "";
     std::cin >> input; 
-
     std::cout << "Adding schoolclass... \n";
     std::transform(input.begin(), input.end(), input.begin(), ::toupper);
     for (int i  =0  ; i < schoolClasses.size(); i++)
     {
-        
         if (input != schoolClasses[i])
         {
             schoolClasses.push_back(input);
         }
     }
-
 }
 
 void SchoolSys::RemoveClass()
 {
-    SchoolSys::Clear();
     if (schoolClasses.size() == 0) { return; }
+    bool removing = true;
+    while(removing)
+    { 
+    SchoolSys::Clear();
+    std::cout << "To remove a Class please type their name (case sensitive) \nNote however that removing a class will remove all students within that same class.\n" << "\n";
+    std::cout << "\nName: ";
+    std::string input = "";
+    std::cin.ignore();
+    std::getline(std::cin,input);
+   for (int i = 0; i < schoolClasses.size(); i++)
+   {
+       if (schoolClasses[i] == input) 
+       {
+           std::cout << "Removing "<< schoolClasses[i] << " along with all students within\n";
+           std::cin.get();
+           //erases all students with schoolclasses[i]
+           for (int j = 0; j < students.size(); j++) 
+           {
+               if (students[j].SchoolClass == schoolClasses[i])
+               {
+                   students.erase(students.begin()+j);
+               }
+           }
+           //erases schoolclasses[i]
+
+           schoolClasses.erase(schoolClasses.begin() + i);
+           removing = false;
+       }
+
+   }
+   SchoolSys::Clear();
+   std::cout << "No such schoolclass found\n\n";
+   std::cout << "1. Exit back to menu\n";
+   std::cout << "2. Find right class\n\n";
+   char lastInput = 'l';
+   std::cin >> lastInput;
+   //exit
+   if (lastInput == '1')
+   {
+       removing = false;
+   }
+   }
+
+   // Shelved Idea 
+   /* if i ever go back to project please minimize
+   if (schoolClasses.size() == 0) { return; }
 
 
     //How many classes should be displayed per page
@@ -213,14 +278,24 @@ void SchoolSys::RemoveClass()
             else  std::cout << "\n d. Next Page";  std::cout << "\n a. Previous Page"; 
         }
         
+        
     }
    
-   
+   */
 
 
 }
+
 //FUNCTIONS THAT ONLY PRINT 
 void SchoolSys::Clear() {
     // CSI[2J clears screen, CSI[H moves the cursor to top-left corner
     std::cout << "\x1B[2J\x1B[H";
+}
+void SchoolSys::ShowStudents()
+{
+
+}
+
+void SchoolSys::ShowClasses()
+{
 }
